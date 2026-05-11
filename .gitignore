@@ -1,0 +1,33 @@
+# .NET
+bin/
+obj/
+*.user
+*.userosscache
+*.sln.docstates
+*.db
+*.db-shm
+*.db-wal
+
+# Node / Frontend
+node_modules/
+.svelte-kit/
+build/
+.output/
+.vercel/
+.netlify/
+.wrangler/
+dist/
+*.log
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Sensitive files
+.env
+.env.*
+!.env.example
+appsettings.Development.json
+endpoints.json

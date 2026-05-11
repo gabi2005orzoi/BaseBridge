@@ -1,0 +1,68 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+
+    color: var(--color-text-primary);
+    background-color: var(--color-background-primary);
+}
+
+:root {
+    --border-radius-md: 6px;
+    --border-radius-lg: 10px;
+
+    --color-background-primary: #ffffff;
+    --color-background-secondary: #f5f5f5;
+    --color-background-success: #f0fdf4;
+    --color-background-danger: #fef2f2;
+    --color-background-warning: #fffbeb;
+    --color-background-info: #eff6ff;
+
+    --color-text-primary: #0f0f0f;
+    --color-text-secondary: #6b7280;
+    --color-text-tertiary: #9ca3af;
+    --color-text-success: #16a34a;
+    --color-text-danger: #dc2626;
+    --color-text-warning: #d97706;
+    --color-text-info: #2563eb;
+
+    --color-border-tertiary: #e5e7eb;
+    --color-border-secondary: #d1d5db;
+    --color-border-success: #bbf7d0;
+    --color-border-danger: #fecaca;
+    --color-border-warning: #fde68a;
+    --color-border-info: #bfdbfe;
+
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    --font-sans: -apple-system, 'Segoe UI', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-background-primary: #0f0f0f;
+        --color-background-secondary: #1a1a1a;
+        --color-background-success: #052e16;
+        --color-background-danger: #450a0a;
+        --color-background-warning: #1c1100;
+        --color-background-info: #0c1a3a;
+
+        --color-text-primary: #f5f5f5;
+        --color-text-secondary: #9ca3af;
+        --color-text-tertiary: #6b7280;
+        --color-text-success: #4ade80;
+        --color-text-danger: #f87171;
+        --color-text-warning: #fbbf24;
+        --color-text-info: #60a5fa;
+
+        --color-border-tertiary: #262626;
+        --color-border-secondary: #333333;
+        --color-border-success: #166534;
+        --color-border-danger: #991b1b;
+        --color-border-warning: #92400e;
+        --color-border-info: #1e40af;
+    }
+}
