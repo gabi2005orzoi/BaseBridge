@@ -8,6 +8,7 @@
 	import { ui } from '$lib/stores/ui.svelte';
 	import { onMount } from 'svelte';
 	import { configStore } from '$lib/stores/config.svelte';
+	import ApiTestModal from '$lib/components/endpoints/ApiTestModal.svelte';
 
 	let { children } = $props();
 
@@ -22,6 +23,8 @@
 	<CreateEndpointModal />
 {:else if ui.modal.type === 'review-query'}
 	<QueryReviewModal />
+{:else if ui.modal.type === 'test-api'}
+	<ApiTestModal/>
 {/if}
 
 <div class="app-layout">
@@ -35,6 +38,7 @@
 		</main>
 	</div>
 </div>
+
 
 <style>
     .app-layout {

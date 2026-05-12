@@ -48,7 +48,7 @@ function createEndpointsStore(){
 			await adminApi.saveEndpoint(request);
 			endpoints = [...endpoints, {
 				name: request.name,
-				path: `api/data/${request.path}`,
+				path: `/api/data/${request.path}`,
 				query: request.validatedQuery,
 				description: request.endpointDescription,
 				parameters: request.parameters

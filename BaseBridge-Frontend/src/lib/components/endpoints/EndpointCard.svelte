@@ -23,19 +23,22 @@
 			isDeleting = false;
 		}
 	}
+
+	function handleTest(){
+		ui.openModal('test-api', endpoint as unknown as Record<string, unknown>);
+	}
+
 </script>
 
 <div class="card endpoint-card">
 	<div class="card-header">
 		<h3 class="title">{endpoint.name}</h3>
-		<button
-			class="btn-delete"
-			onclick={handleDelete}
-			disabled={isDeleting}
-			aria-label="Delete endpoint"
-		>
-			{isDeleting ? '...' : 'Delete'}
-		</button>
+		<div class="actions">
+			<button class="btn-test" onclick={handleTest}>Test API</button>
+			<button class="btn-delete" onclick={handleDelete} disabled={isDeleting} aria-label="Delete endpoint">
+				{isDeleting ? '...' : 'Delete'}
+			</button>
+		</div>
 	</div>
 
 	<div class="info-row">
@@ -98,4 +101,16 @@
         font-family: var(--font-mono);
         border: 1px solid rgba(59, 130, 246, 0.2);
     }
+
+    .actions { display: flex; gap: 0.5rem; }
+    .btn-test {
+        background: var(--color-background-info);
+        color: var(--color-text-info);
+        border: 1px solid var(--color-border-info);
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--border-radius-md);
+        cursor: pointer;
+        font-size: 0.85rem;
+    }
+    .btn-test:hover { background: var(--color-text-info); color: white; }
 </style>

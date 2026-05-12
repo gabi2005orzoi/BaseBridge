@@ -11,8 +11,7 @@
 	async function handleSubmit(e: Event) {
 		e.preventDefault();
 		try {
-			// Adăugăm 'groq' în lista care nu trimite API key dacă folosește cheia de server
-			const finalApiKey = ['groq', 'deepseek', 'gemini'].includes(provider) ? '' : apiKey;
+			const finalApiKey = provider === 'groq' ? '' : apiKey;
 			await configStore.saveAi({ provider, apiKey: finalApiKey, modelName });
 			ui.success('AI configuration has been updated!');
 		} catch {
@@ -29,20 +28,16 @@
 		<div class="form-group">
 			<label for="provider">Provider AI</label>
 			<select id="provider" bind:value={provider}>
-				<!-- Am adăugat Groq ca default pe prima poziție -->
 				<option value="groq">Groq (Default Server Key)</option>
 				<option value="groq-custom">Groq (Custom Key)</option>
-				<option value="deepseek">DeepSeek (Server Key)</option>
 				<option value="deepseek-custom">DeepSeek (Custom Key)</option>
-				<option value="gemini">Google Gemini (Server Key)</option>
 				<option value="gemini-custom">Google Gemini (Custom Key)</option>
 				<option value="openai">OpenAI (ChatGPT)</option>
 				<option value="anthropic">Anthropic (Claude)</option>
 			</select>
 		</div>
 
-		<!-- Câmpul API Key apare doar dacă provider-ul NU folosește o cheie hardcodată pe server -->
-		{#if !['groq', 'deepseek', 'gemini'].includes(provider)}
+		{#if provider !== 'groq'}
 			<div class="form-group">
 				<label for="apiKey">API Key</label>
 				<input type="password" id="apiKey" bind:value={apiKey} required placeholder="sk-..." />
@@ -51,7 +46,6 @@
 
 		<div class="form-group">
 			<label for="modelName">Model Name</label>
-			<!-- Ternar actualizat pentru a oferi placeholder-ul corect pentru Groq -->
 			<input
 				type="text"
 				id="modelName"

@@ -6,7 +6,7 @@ interface Toast {
 	type: ToastType;
 }
 
-type ModalType = 'create-endpoint' | 'review-query' | 'db-config' | 'ai-config' | null;
+type ModalType = 'create-endpoint' | 'review-query' | 'db-config' | 'ai-config' | 'test-api' | null;
 
 interface ModalState{
 	type: ModalType;

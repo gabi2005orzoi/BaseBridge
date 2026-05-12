@@ -23,9 +23,7 @@ public class AiManagerService(
         string apiKey = "";
         string modelName = aiConfig.ModelName;
         string providerKey = aiConfig.Provider?.ToLower() ?? "groq";
-
-        // Am schimbat Gemini cu DeepSeek ca provider default configurat direct din server
-
+        
         if (providerKey == "groq")
         {
             apiKey = configuration["Groq:DefaultApiKey"];
@@ -34,24 +32,6 @@ public class AiManagerService(
                 throw new Exception("Server is missing the default Groq API Key. Please check appsettings.json.");
                 
             modelName = string.IsNullOrWhiteSpace(modelName) ? "llama-3.3-70b-versatile" : modelName;
-        }
-        else if (providerKey == "deepseek")
-        {
-            apiKey = configuration["DeepSeek:DefaultApiKey"];
-            
-            if (string.IsNullOrWhiteSpace(apiKey))
-                throw new Exception("Server is missing the default DeepSeek API Key. Please check appsettings.json.");
-                
-            modelName = string.IsNullOrWhiteSpace(modelName) ? "deepseek-chat" : modelName; 
-        }
-        else if (providerKey == "gemini")
-        {
-            // Păstrăm și logica de Gemini în caz că utilizatorul comută înapoi
-            apiKey = configuration["Gemini:DefaultApiKey"];
-            if (string.IsNullOrWhiteSpace(apiKey))
-                throw new Exception("Server is missing the default Gemini API Key. Please check appsettings.json.");
-            
-            modelName = string.IsNullOrWhiteSpace(modelName) ? "gemini-2.0-flash" : modelName;
         }
         else
         {
@@ -63,7 +43,6 @@ public class AiManagerService(
 
         string prompt = PromptBuilder.BuildSqlPrompt(description, dbSchema, dbType);
 
-        // Actualizat switch-ul pentru a face fallback pe DeepSeek
         IAiProvider provider = providerKey switch
         {
             "chatgpt" => new OpenAiProvider(),
