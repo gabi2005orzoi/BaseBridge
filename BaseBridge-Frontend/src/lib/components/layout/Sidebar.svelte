@@ -3,6 +3,7 @@
 
 	let isHomeActive = $derived(String($page.url.pathname) === '/');
 	let isConfigActive = $derived(String($page.url.pathname).includes('/config'));
+	let isSchemaActive = $derived(String($page.url.pathname).includes('/schema'));
 </script>
 
 <aside class="sidebar">
@@ -32,6 +33,14 @@
 				<path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
 			</svg>
 			Configuration
+		</button>
+
+		<button class="nav-link" class:active={isSchemaActive} onclick={() => window.location.href = '/schema'}>
+			<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+				<path d="M4 7V4h16v3M4 11v-4m16 4v-4M4 15v-4m16 4v-4M4 20v-5h16v5M4 17h16"/>
+				<rect x="2" y="4" width="20" height="16" rx="2"/>
+			</svg>
+			Database Schema
 		</button>
 	</nav>
 </aside>

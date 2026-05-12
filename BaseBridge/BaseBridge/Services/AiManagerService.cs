@@ -1,5 +1,6 @@
 using BaseBridge.Database;
 using BaseBridge.Models;
+using BaseBridge.Models.DTOs;
 using BaseBridge.Services.AiProviders;
 using BaseBridge.Utils;
 using BaseBridge.Utils.Exception;
@@ -13,7 +14,7 @@ public class AiManagerService(
     ILogger<AiManagerService> logger,
     IConfiguration configuration) 
 {
-    public async Task<string> GenerateDynamicQueryAsync(string description, string dbSchema, string dbType, List<EndpointParameter>? parameters = null)
+    public async Task<string> GenerateDynamicQueryAsync(string description, DatabaseSchemaResponse dbSchema, string dbType, List<EndpointParameter>? parameters = null)
     {
         var aiConfig = await dbContext.AiConfigs.FirstOrDefaultAsync();
 
@@ -41,7 +42,7 @@ public class AiManagerService(
             apiKey = EncryptionUtils.Decrypt(aiConfig.ApiKey);
         }
 
-        string prompt = PromptBuilder.BuildSqlPrompt(description, dbSchema, dbType);
+        string prompt = PromptBuilder.BuildSqlPrompt(description, dbSchema, dbType, parameters);
 
         IAiProvider provider = providerKey switch
         {

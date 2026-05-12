@@ -21,5 +21,8 @@ export const adminApi = {
 		api.delete<{message: string}>('/api/admin/delete-endpoint', {name}),
 	getAllEndpoint: () =>
 		api.get<EndpointData[]>('/api/admin/all-endpoints'),
-	getStatus: () => api.get<{ isDbConfigured: boolean; isAiConfigured: boolean }>('/api/admin/status')
+	getStatus: () =>
+		api.get<{ isDbConfigured: boolean; isAiConfigured: boolean }>('/api/admin/status'),
+	getDatabaseSchema: () =>
+		api.get<any>('/api/admin/database-schema')
 };

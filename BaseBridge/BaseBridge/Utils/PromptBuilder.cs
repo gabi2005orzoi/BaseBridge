@@ -1,11 +1,12 @@
 using System.Text;
 using BaseBridge.Models;
+using BaseBridge.Models.DTOs;
 
 namespace BaseBridge.Utils;
 
 public static class PromptBuilder
 {
-    public static string BuildSqlPrompt(string description, string dbSchema, string dbType, List<EndpointParameter>? parameters = null)
+    public static string BuildSqlPrompt(string description, DatabaseSchemaResponse schemaResponse, string dbType, List<EndpointParameter>? parameters = null)
     {
         StringBuilder prompt = new StringBuilder();
         prompt.AppendLine($"You are an expert SQL developer for {dbType.ToUpper()}. Your task is to translate a natural language request into a valid SQL query based on the provided database schema.");
@@ -16,8 +17,42 @@ public static class PromptBuilder
         prompt.AppendLine("4. IMPORTANT: If the request asks for dynamic filters(e.g., 'by name', 'for a specific status', 'greater than an amount') you MUST use parameterized queries.");
         prompt.AppendLine("5. Format the parameters using the '@' symbol followed by the parameter name in lowercase (e.g., WHERE age > @age AND status = @status).");
         prompt.AppendLine("6. NEVER hardcode filters values unless explicitly told to do so by the user");
-        prompt.AppendLine("\nDATABASE SCHEMA:");
-        prompt.AppendLine(dbSchema);
+        
+        prompt.AppendLine("\nDATABASE SCHEMA AND SAMPLE DATA:");
+        foreach (var table in schemaResponse.Tables)
+        {
+            prompt.AppendLine($"- Table: {table.Name}");
+            foreach (var col in table.Columns)
+            {
+                prompt.AppendLine($"  * {col.Name} ({col.DataType})");
+            }
+
+            if (table.Relationships.Count > 0)
+            {
+                prompt.AppendLine("  Relationships:");
+                foreach (var rel in table.Relationships)
+                {
+                    prompt.AppendLine($"    - {table.Name}.{rel.Column} -> {rel.ReferencedTable}.{rel.ReferencedColumn}");
+                }
+            }
+
+            if (table.SampleData.Count > 0)
+            {
+                prompt.AppendLine("  Sample Data (up to 3 rows):");
+                // Get header
+                var columns = table.SampleData[0].Keys.ToList();
+                prompt.AppendLine($"    {string.Join(" | ", columns)}");
+                
+                // Get rows
+                foreach (var row in table.SampleData)
+                {
+                    var values = columns.Select(c => row[c]?.ToString() ?? "NULL");
+                    prompt.AppendLine($"    {string.Join(" | ", values)}");
+                }
+            }
+            prompt.AppendLine();
+        }
+
         prompt.AppendLine("\nUSER REQUEST:");
         prompt.AppendLine(description);
         if (parameters != null && parameters.Count > 0)

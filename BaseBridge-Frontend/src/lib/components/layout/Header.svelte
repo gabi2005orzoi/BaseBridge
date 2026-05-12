@@ -2,7 +2,11 @@
 	import { configStore } from '$lib/stores/config.svelte';
 	import { page } from '$app/stores';
 
-	let pageTitle = $derived(($page.url.pathname as string).includes('/config') ? 'Initial Configuration' : 'Dashboard');
+	let pageTitle = $derived(
+		($page.url.pathname as string).includes('/config') ? 'Initial Configuration' :
+		($page.url.pathname as string).includes('/schema') ? 'Database Visualizer' :
+		'Dashboard'
+	);
 </script>
 
 <header class="header">

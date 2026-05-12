@@ -43,7 +43,7 @@ public class UserFluxController(
             throw new ArgumentNullException(nameof(dbConfig), "Database not configured yet");
         var dbService = new DbService(dbConfig.DbType, dbConfig.Host, dbConfig.DbName, dbConfig.User,
             dbConfig.Password);
-        var schema = await dbService.GetDatabaseSchema();
+        var schema = await dbService.GetFullSchemaAsync();
         
         string sql = await aiManagerService.GenerateDynamicQueryAsync(request.EndpointDescription, schema, dbConfig.DbType, request.Parameters);
         
@@ -111,5 +111,16 @@ public class UserFluxController(
             IsDbConfigured = dbConfig != null,
             IsAiConfigured = aiConfig != null
         });
+    }
+
+    [HttpGet("database-schema")]
+    public async Task<IActionResult> GetDatabaseSchema()
+    {
+        var dbConfig = await dbConfigurationService.GetConfigAsync();
+        if (dbConfig == null)
+            return BadRequest("Database not configured");
+        var dbService = new DbService(dbConfig.DbType, dbConfig.Host, dbConfig.DbName, dbConfig.User, dbConfig.Password);
+        var schema = await dbService.GetFullSchemaAsync();
+        return Ok(schema);
     }
 }
