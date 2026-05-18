@@ -48,11 +48,10 @@ public class AiManagerService(
         {
             "chatgpt" => new OpenAiProvider(),
             "openai" => new OpenAiProvider(),
-            "gemini-custom" => new GeminiProvider(),
             "gemini" => new GeminiProvider(),
             "deepseek" => new DeepSeekProvider(),
             "groq" => new GroqProvider(),
-            _ => new GroqProvider() // DeepSeek este acum provider-ul DEFAULT
+            _ => new GroqProvider() // Groq default provider
         };
 
         try

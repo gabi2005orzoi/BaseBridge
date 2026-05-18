@@ -48,3 +48,28 @@ export interface GenerateResponse{
 	message: string;
 	parameters?: EndpointParameter[];
 }
+
+export interface RelationshipInfo{
+	column: string;
+	referencedTable: string;
+	referencedColumn: string;
+	type: string
+}
+
+export interface ColumnInfo{
+	name: string;
+	dataType: string;
+	isPrimaryKey: boolean;
+	isForeignKey: boolean;
+}
+
+export interface TableInfo{
+	name: string;
+	columns: ColumnInfo[];
+	relationships: RelationshipInfo[];
+	sampleData: Record<string, any>[];
+}
+
+export interface DatabaseSchemaResponse{
+	tables: TableInfo[];
+}

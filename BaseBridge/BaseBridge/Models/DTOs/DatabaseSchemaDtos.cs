@@ -19,6 +19,8 @@ public class ColumnInfo
 {
     public string Name { get; set; } = string.Empty;
     public string DataType { get; set; } = string.Empty;
+    public bool IsPrimaryKey { get; set; }
+    public bool IsForeignKey { get; set; }
 }
 
 public class RelationshipInfo
@@ -26,4 +28,5 @@ public class RelationshipInfo
     public string Column { get; set; } = string.Empty;
     public string ReferencedTable { get; set; } = string.Empty;
     public string ReferencedColumn { get; set; } = string.Empty;
+    public string Type { get; set; } = "one-to-many";
 }
