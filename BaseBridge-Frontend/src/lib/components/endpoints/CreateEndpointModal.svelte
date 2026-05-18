@@ -8,6 +8,7 @@
 	let name = $state('');
 	let description = $state('');
 	let parameters = $state<EndpointParameter[]>([]);
+	let isPaginationMandatory = $state(true);
 
 	const PARAM_TYPES = ['string', 'int', 'decimal', 'bool', 'date'];
 
@@ -28,7 +29,8 @@
 		const generated = await endpointsStore.generate({
 			name,
 			endpointDescription: description,
-			parameters: parameters.filter(p => p.name.trim() !== '')
+			parameters: parameters.filter(p => p.name.trim() !== ''),
+			isPaginationMandatory
 		});
 
 		if (generated) {
@@ -59,6 +61,13 @@
 				rows="4"
 				placeholder="e.g., Returns all users with the status 'active' and age over 18 from the Users table..."
 			></textarea>
+		</div>
+
+		<div class="form-group checkbox-group">
+			<label class="flex-label">
+				<input type="checkbox" bind:checked={isPaginationMandatory}>
+				<span>Require Pagination (Recommended for large datasets)</span>
+			</label>
 		</div>
 
 		<div class="form-group">
@@ -179,4 +188,25 @@
     .btn-primary { background: var(--color-text-info); color: white; border: none; padding: 0.6rem 1.2rem; border-radius: var(--border-radius-md); cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem; transition: filter 0.2s; }
     .btn-primary:hover:not(:disabled) { filter: brightness(1.1); }
     .btn-primary:disabled { opacity: 0.7; cursor: not-allowed; }
+
+		.checkbox-group{
+				margin-top: 0.5rem;
+		}
+
+		.flex-label{
+				display: flex;
+				align-items: center;
+				gap: 0.6rem;
+				font-size: 0.9rem;
+				cursor: pointer;
+				color: var(--color-text-primary);
+				font-weight: 500;
+		}
+
+		.flex-label input[type="checkbox"]{
+				width: 1.1rem;
+				height: 1.1rem;
+				cursor: pointer;
+				accent-color: var(--color-text-info);
+		}
 </style>

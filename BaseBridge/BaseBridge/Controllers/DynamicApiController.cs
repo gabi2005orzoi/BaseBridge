@@ -20,6 +20,9 @@ public class DynamicApiController(
         var normalizePath = "/api/data/" + endpointPath;
         var config = await dbConfigService.GetConfigAsync();
 
+        int page = int.TryParse(Request.Query["page"], out var p) && p > 0 ? p : 1;
+        int pageSize = Math.Min(int.TryParse(Request.Query["page-size"], out var ps) && ps > 0 ? ps : 50, 100);
+
         if (config == null)
             throw new DbNotConfiguredException();
         
@@ -45,12 +48,21 @@ public class DynamicApiController(
         try
         {
             var dbService = new DbService(config.DbType, config.Host, config.DbName, config.User, config.Password);
-            var data = await dbService.ExecuteDynamicQueryAsync(endpoint.Query, queryParams);
-            return Ok(data);
+            
+            if (endpoint.IsPaginationMandatory)
+            {
+                var pagedData = await dbService.ExecutePaginatedDynamicQueryAsync(endpoint.Query, queryParams, page, pageSize);
+                return Ok(pagedData);
+            }
+            else
+            {
+                var data = await dbService.ExecuteDynamicQueryAsync(endpoint.Query, queryParams);
+                return Ok(data);
+            }
         }
         catch (ArgumentException argEx)
         {
-            return BadRequest(new { Message = argEx.Message });
+            return BadRequest(new {argEx.Message });
         }
         catch(DbException dbEx)
         {

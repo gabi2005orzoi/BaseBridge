@@ -10,4 +10,5 @@ public class SaveEndpointRequest
     public string EndpointDescription { get; set; } = string.Empty;
     public string ValidatedQuery { get; set; } = string.Empty;
     public List<EndpointParameter> Parameters { get; set; } = new();
+    public bool IsPaginationMandatory { get; set; }
 }

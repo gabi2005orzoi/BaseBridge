@@ -23,6 +23,7 @@ export interface EndpointData{
 	query: string;
 	description: string;
 	parameters?: EndpointParameter[];
+	isPaginationMandatory?: boolean;
 }
 
 export interface DeleteRequest{
@@ -33,6 +34,7 @@ export interface GenerateEndpointRequest{
 	name: string;
 	endpointDescription: string;
 	parameters?: EndpointParameter[];
+	isPaginationMandatory: boolean;
 }
 
 export interface SaveEndpointRequest{
@@ -41,6 +43,7 @@ export interface SaveEndpointRequest{
 	endpointDescription: string;
 	validatedQuery: string;
 	parameters?: EndpointParameter[];
+	isPaginationMandatory: boolean;
 }
 
 export interface GenerateResponse{

@@ -33,7 +33,8 @@
 			path: pathSlug,
 			endpointDescription: req.endpointDescription,
 			validatedQuery: editableQuery,
-			parameters: editableParameters.filter(p => p.name.trim() !== '')
+			parameters: editableParameters.filter(p => p.name.trim() !== ''),
+			isPaginationMandatory: req.isPaginationMandatory
 		});
 
 		if (!endpointsStore.error) {

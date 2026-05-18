@@ -80,7 +80,8 @@ public class UserFluxController(
             Path = $"/api/data/{request.Path}",
             Query = request.ValidatedQuery,
             Description = request.EndpointDescription,
-            Parameters = request.Parameters
+            Parameters = request.Parameters,
+            IsPaginationMandatory = request.IsPaginationMandatory
         };
         
         await endpointService.SaveEndpointAsync(newEndpoint);

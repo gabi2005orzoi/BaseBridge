@@ -15,4 +15,5 @@ public class EndpointData
     public string Description { get; set; } = null!;
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public List<EndpointParameter> Parameters { get; set; } = new();
+    public bool IsPaginationMandatory { get; set; }
 }

@@ -62,7 +62,48 @@ public class DbService(string dbType, string host, string dbName, string user, s
         return result;
     }
 
+    public async Task<PaginatedResponse> ExecutePaginatedDynamicQueryAsync(string query, Dictionary<string, object>? parameters, int page, int pageSize)
+    {
+        string countQuery = $"SELECT COUNT(*) FROM ({query}) AS CountTable";
+        int totalItems = 0;
 
+        await using (var con = _connection.CreateConnection())
+        {
+            await con.OpenAsync();
+            await using var countCmd = con.CreateCommand();
+            countCmd.CommandText = countQuery;
+
+            if (parameters != null)
+                foreach (var parameter in parameters)
+                {
+                    var dbParam = countCmd.CreateParameter();
+                    dbParam.ParameterName = parameter.Key.Trim('@');
+                    dbParam.Value = parameter.Value ?? DBNull.Value;
+                    countCmd.Parameters.Add(dbParam);
+                }
+
+            var countResult = await countCmd.ExecuteScalarAsync();
+            totalItems = countResult != null ? Convert.ToInt32(countResult) : 0;
+        }
+
+        int offset = (page - 1) * pageSize;
+        string paginatedQuery = dbType.ToLower() switch
+        {
+            "postgresql" => $"{query} LIMIT {pageSize} OFFSET {offset}",
+            "mysql" => $"{query} LIMIT {pageSize} OFFSET {offset}",
+            _ => $"{query} ORDER BY (SELECT NULL) OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY"
+        };
+
+        var pagedData = await ExecuteDynamicQueryAsync(paginatedQuery, parameters);
+
+        return new PaginatedResponse
+        {
+            Page = page,
+            PageSize = pageSize,
+            TotalItems = totalItems,
+            Data = pagedData
+        };
+    }
 
     public async Task<DatabaseSchemaResponse> GetFullSchemaAsync()
     {
