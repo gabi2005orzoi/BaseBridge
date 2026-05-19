@@ -1,6 +1,7 @@
 using System.Data;
 using System.Data.Common;
 using System.Text;
+using System.Text.RegularExpressions;
 using BaseBridge.Database;
 using BaseBridge.Models.DTOs;
 using GenerativeAI;
@@ -64,7 +65,8 @@ public class DbService(string dbType, string host, string dbName, string user, s
 
     public async Task<PaginatedResponse> ExecutePaginatedDynamicQueryAsync(string query, Dictionary<string, object>? parameters, int page, int pageSize)
     {
-        string countQuery = $"SELECT COUNT(*) FROM ({query}) AS CountTable";
+        string countBaseQuery = Regex.Replace(query, @"\bORDER\s+BY\b.*$", "", RegexOptions.IgnoreCase | RegexOptions.Singleline | RegexOptions.RightToLeft);
+        string countQuery = $"SELECT COUNT(*) FROM ({countBaseQuery}) AS CountTable";
         int totalItems = 0;
 
         await using (var con = _connection.CreateConnection())
@@ -87,11 +89,14 @@ public class DbService(string dbType, string host, string dbName, string user, s
         }
 
         int offset = (page - 1) * pageSize;
+        bool hasOrderBy = query.Contains("ORDER BY", StringComparison.OrdinalIgnoreCase);
         string paginatedQuery = dbType.ToLower() switch
         {
             "postgresql" => $"{query} LIMIT {pageSize} OFFSET {offset}",
             "mysql" => $"{query} LIMIT {pageSize} OFFSET {offset}",
-            _ => $"{query} ORDER BY (SELECT NULL) OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY"
+            _ => hasOrderBy 
+                ? $"{query} OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY"
+                : $"{query} ORDER BY 1 OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY"
         };
 
         var pagedData = await ExecuteDynamicQueryAsync(paginatedQuery, parameters);
