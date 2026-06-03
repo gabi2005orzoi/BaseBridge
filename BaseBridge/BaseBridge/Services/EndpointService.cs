@@ -43,4 +43,29 @@ public class EndpointService(
         await dbContext.SaveChangesAsync();
     }
 
+    public async Task UpdateEndpointAsync(string originalName, EndpointData updatedEndpoint)
+    {
+        var existingEndpoint = await dbContext.Endpoints.Include(e => e.Parameters)
+            .FirstOrDefaultAsync(e => e.Name == originalName);
+        if (existingEndpoint == null)
+            throw new EndpointNotFoundException();
+
+        if (originalName != updatedEndpoint.Name)
+        {
+            var exists = await dbContext.Endpoints.AnyAsync(e => e.Name == updatedEndpoint.Name);
+            if (exists)
+                throw new EndpointAlreadyExistsException();
+        }
+
+        existingEndpoint.Name = updatedEndpoint.Name;
+        existingEndpoint.Path = updatedEndpoint.Path;
+        existingEndpoint.Description = updatedEndpoint.Description;
+        existingEndpoint.Query = updatedEndpoint.Query;
+        existingEndpoint.IsPaginationMandatory = updatedEndpoint.IsPaginationMandatory;
+        
+        dbContext.RemoveRange(existingEndpoint.Parameters);
+        existingEndpoint.Parameters = updatedEndpoint.Parameters;
+
+        await dbContext.SaveChangesAsync();
+    }
 }

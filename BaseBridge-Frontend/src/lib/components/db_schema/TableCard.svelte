@@ -7,7 +7,7 @@
 		onDoubleClick: (e: MouseEvent) => void,
 		onMouseDown: (e: MouseEvent, name: string) => void,
 		coords: {x: number, y: number}
-	}= $props();
+	} = $props();
 </script>
 
 <div

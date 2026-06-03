@@ -24,5 +24,6 @@ export const adminApi = {
 	getStatus: () =>
 		api.get<{ isDbConfigured: boolean; isAiConfigured: boolean }>('/api/admin/status'),
 	getDatabaseSchema: () =>
-		api.get<any>('/api/admin/database-schema')
+		api.get<any>('/api/admin/database-schema'),
+	updateEndpoint: (originalName: string, data: SaveEndpointRequest) => api.put<{message: string}>(`/api/admin/update-endpoint/${originalName}`, data)
 };

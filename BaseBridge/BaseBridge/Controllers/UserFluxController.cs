@@ -124,4 +124,27 @@ public class UserFluxController(
         var schema = await dbService.GetFullSchemaAsync();
         return Ok(schema);
     }
+
+    [HttpPut("update-endpoint/{originalName}")]
+    public async Task<IActionResult> UpdateEndpoint(string originalName, [FromBody] SaveEndpointRequest request)
+    {
+        var dbConfig = await dbConfigurationService.GetConfigAsync();
+
+        if (dbConfig == null)
+            throw new Exception("Cannot update an endpoint until set database credentials");
+        
+        validator.Validate(request.ValidatedQuery, dbConfig.DbType);
+        var updatedEndpointRequest = new EndpointData
+        {
+            Name = request.Name,
+            Path = request.Path,
+            Query = request.ValidatedQuery,
+            Description = request.EndpointDescription,
+            Parameters = request.Parameters,
+            IsPaginationMandatory = request.IsPaginationMandatory
+        };
+
+        await endpointService.UpdateEndpointAsync(originalName, updatedEndpointRequest);
+        return Ok(new { Message = $"Endpoint '{request.Name}' updated successfully" });
+    }
 }

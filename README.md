@@ -1,50 +1,42 @@
 # BaseBridge
 
-BaseBridge is a project consisting of a .NET backend and a SvelteKit frontend. It provides a bridge for various AI providers (Gemini, Groq, DeepSeek, OpenAI) and database management features.
+A personal project that ties together a .NET backend with a SvelteKit frontend. The idea behind it is pretty simple — a unified interface for chatting with different AI providers (Gemini, Groq, DeepSeek, OpenAI) and managing some database stuff on the side.
 
-## Project Structure
+## What's inside
 
-- `BaseBridge/`: The .NET backend API.
-- `BaseBridge-Frontend/`: The SvelteKit frontend application.
+```
+BaseBridge/             → .NET 9 backend (REST API, SQLite, auth)
+BaseBridge-Frontend/    → SvelteKit frontend
+```
 
-## Prerequisites
+The backend handles routing requests to whichever AI provider you configure, manages users, and exposes a dynamic API layer. The frontend connects to it and gives you a clean UI to interact with everything.
 
-- [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- [Node.js](https://nodejs.org/) (v18 or later)
-- [npm](https://www.npmjs.com/)
+## Stack
 
-## Getting Started
+- **Backend**: .NET 9, Entity Framework Core, SQLite
+- **Frontend**: SvelteKit, TypeScript
+- **AI Providers**: Gemini, Groq, DeepSeek, OpenAI
 
-### Backend Setup
+## Getting started
 
-1. Navigate to the backend directory:
-   ```bash
-   cd BaseBridge/BaseBridge
-   ```
-2. Create a local configuration file:
-   - Copy `appsettings.json` to `appsettings.Development.json`.
-   - Fill in your API keys in `appsettings.Development.json`.
-3. (Optional) Create a `.env` file based on `.env.example` if you prefer environment variables.
-4. Run the backend:
-   ```bash
-   dotnet run
-   ```
+### Backend
 
-### Frontend Setup
+```bash
+cd BaseBridge/BaseBridge
+```
 
-1. Navigate to the frontend directory:
-   ```bash
-   cd BaseBridge-Frontend
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the development server:
-   ```bash
-   npm run dev
-   ```
+Copy `appsettings.json` to `appsettings.Development.json` and fill in your API keys. Then just:
 
-## License
+```bash
+dotnet run
+```
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+### Frontend
+
+```bash
+cd BaseBridge-Frontend
+npm install
+npm run dev
+```
+
+That's it. The dev server will start and connect to the backend automatically.
